@@ -54,5 +54,15 @@ List<FaceCropPlan> buildFaceCropPlan({
 }
 
 List<String> formatFaceCropSummary(List<FaceCropPlan> cropPlan) {
-  throw UnimplementedError();
+  return cropPlan.map((plan) {
+    if (plan.isMissing) {
+      return '${plan.faceName} | missing';
+    }
+
+    return '${plan.faceName} | '
+        '${plan.pixelLeft}, '
+        '${plan.pixelTop}, '
+        '${plan.pixelWidth}, '
+        '${plan.pixelHeight}';
+  }).toList();
 }
