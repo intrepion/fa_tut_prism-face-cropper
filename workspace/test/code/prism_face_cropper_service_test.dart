@@ -25,4 +25,35 @@ void main() {
       expect(validation.missingFaces, ['back', 'left', 'right', 'bottom']);
     },
   );
+
+  test(
+    'buildFaceCropPlan converts normalized rectangles into integer pixel crops',
+    () {
+      final cropPlan = buildFaceCropPlan(
+        imageWidth: 1000,
+        imageHeight: 700,
+        faceSelectionMap: {
+          'front': const NormalizedRect(
+            left: 0.30,
+            top: 0.20,
+            width: 0.20,
+            height: 0.45,
+          ),
+        },
+      );
+
+      final frontPlan = cropPlan.firstWhere((plan) => plan.faceName == 'front');
+      final bottomPlan = cropPlan.firstWhere(
+        (plan) => plan.faceName == 'bottom',
+      );
+
+      expect(frontPlan.pixelLeft, 300);
+      expect(frontPlan.pixelTop, 140);
+      expect(frontPlan.pixelWidth, 200);
+      expect(frontPlan.pixelHeight, 315);
+      expect(frontPlan.isMissing, isFalse);
+
+      expect(bottomPlan.isMissing, isTrue);
+    },
+  );
 }
