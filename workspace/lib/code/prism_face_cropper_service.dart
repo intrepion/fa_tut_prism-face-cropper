@@ -29,7 +29,28 @@ List<FaceCropPlan> buildFaceCropPlan({
   required int imageHeight,
   required Map<String, NormalizedRect?> faceSelectionMap,
 }) {
-  throw UnimplementedError();
+  return canonicalPrismFaces.map((face) {
+    final rect = faceSelectionMap[face];
+    if (rect == null) {
+      return FaceCropPlan(
+        faceName: face,
+        pixelLeft: 0,
+        pixelTop: 0,
+        pixelWidth: 0,
+        pixelHeight: 0,
+        isMissing: true,
+      );
+    }
+
+    return FaceCropPlan(
+      faceName: face,
+      pixelLeft: (rect.left * imageWidth).round(),
+      pixelTop: (rect.top * imageHeight).round(),
+      pixelWidth: (rect.width * imageWidth).round(),
+      pixelHeight: (rect.height * imageHeight).round(),
+      isMissing: false,
+    );
+  }).toList();
 }
 
 List<String> formatFaceCropSummary(List<FaceCropPlan> cropPlan) {
