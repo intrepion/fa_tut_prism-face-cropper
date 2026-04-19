@@ -56,4 +56,31 @@ void main() {
       expect(bottomPlan.isMissing, isTrue);
     },
   );
+
+  test(
+    'formatFaceCropSummary preserves canonical order and missing markers',
+    () {
+      final cropPlan = buildFaceCropPlan(
+        imageWidth: 1000,
+        imageHeight: 700,
+        faceSelectionMap: {
+          'front': const NormalizedRect(
+            left: 0.30,
+            top: 0.20,
+            width: 0.20,
+            height: 0.45,
+          ),
+        },
+      );
+
+      expect(formatFaceCropSummary(cropPlan), [
+        'front | 300, 140, 200, 315',
+        'back | missing',
+        'left | missing',
+        'right | missing',
+        'top | missing',
+        'bottom | missing',
+      ]);
+    },
+  );
 }
